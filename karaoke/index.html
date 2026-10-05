@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KAVA SOUND β</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#06101e;color:#fff;font-family:"Yu Gothic",system-ui,sans-serif}
+main{width:min(980px,100%);margin:auto;padding:10px}.card{background:#0c2037;border:1px solid #ffffff22;border-radius:18px;padding:13px;margin-bottom:10px}
+h1{font-size:clamp(1.4rem,4vw,2rem)}.parts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.parts button,.fb button,.ctl button,#copy{border:1px solid #ffffff25;background:#163451;color:#fff;border-radius:12px;padding:11px;font:inherit}
+.parts button.active{background:linear-gradient(135deg,#00acd3,#6559eb);outline:2px solid #83ebff}.bars{background:#000;border-radius:14px;overflow:hidden}
+video{display:block;width:100%;height:auto}.ctl{display:grid;grid-template-columns:auto auto auto 1fr auto;gap:8px;align-items:center;margin-top:10px}.ctl .primary{background:linear-gradient(135deg,#00b8dc,#695cff);font-weight:900}
+input[type=range]{width:100%}.time{font-variant-numeric:tabular-nums;min-width:88px}.fb{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.fb button.active{outline:3px solid white}
+textarea{width:100%;min-height:72px;margin-top:9px;background:#06172a;color:#fff;border:1px solid #ffffff22;border-radius:11px;padding:9px}
+pre{white-space:pre-wrap;background:#05111f;border-radius:10px;padding:9px;color:#bdd7e9;font-size:.76rem}
+@media(max-width:650px){.parts{grid-template-columns:repeat(2,1fr)}.fb{grid-template-columns:repeat(2,1fr)}.ctl{grid-template-columns:auto auto auto 1fr}.time{grid-column:1/-1;text-align:center}}
+</style></head>
+<body><main><div style="margin:4px 0 10px"><a href="../" style="color:#9deaff;text-decoration:none">← KAVA SOUND メニューへ</a></div>
+<h1>KAVA SOUND カラオケバー検証β</h1>
+<section class="card"><b>確認するのは2つ。</b><p>① バーが出ているか　② 選んだパートの音とバーが合っているか</p></section>
+<section class="card"><div class="parts">
+<button class="active" data-part="soprano">ソプラノ</button><button data-part="alto">アルト</button><button data-part="tenor">男声</button><button data-part="chorus">合唱</button>
+</div></section>
+<section class="card"><div class="bars"><video id="video" src="../video/bars.mp4" muted playsinline preload="metadata"></video></div>
+<div class="ctl"><button id="back">−5秒</button><button id="play" class="primary">▶ 再生</button><button id="stop">■</button><input id="seek" type="range" min="0" max="275.043" step="0.01" value="0"><span class="time" id="time">0:00 / 4:35</span></div>
+</section>
+<section class="card"><h3>その瞬間、どうだった？</h3><div class="fb">
+<button data-result="合っている">✅ 合ってる</button><button data-result="バーが早い">⏩ バーが早い</button><button data-result="バーが遅い">⏪ バーが遅い</button><button data-result="高さが違う">↕ 高さ違う</button><button data-result="バーがない／変">❓ バー変</button>
+</div><textarea id="comment" placeholder="例：1:20『できることは』から遅れる"></textarea><button id="copy">📋 報告文をコピー</button><pre id="report"></pre></section>
+</main>
+<script>
+const labels={soprano:"ソプラノ",alto:"アルト",tenor:"男声",chorus:"合唱"};const audios={};Object.keys(labels).forEach(k=>audios[k]=new Audio(`../audio/${k}.mp3`));
+const video=document.querySelector("#video"),seek=document.querySelector("#seek"),time=document.querySelector("#time"),play=document.querySelector("#play");
+let part="soprano",playing=false,result="";const VIDEO_RATIO=270.141/275.043;const a=()=>audios[part],fmt=t=>`${Math.floor(t/60)}:${Math.floor(t%60).toString().padStart(2,"0")}`;
+function sync(force=false){const target=a().currentTime*VIDEO_RATIO;if(force||Math.abs(video.currentTime-target)>.12)video.currentTime=target;video.playbackRate=VIDEO_RATIO}
+async function start(){Object.values(audios).forEach(x=>x.pause());sync(true);await Promise.allSettled([a().play(),video.play()]);playing=true;play.textContent="❚❚ 一時停止"}
+function pause(){a().pause();video.pause();playing=false;play.textContent="▶ 再生"}function stop(){pause();Object.values(audios).forEach(x=>x.currentTime=0);video.currentTime=0}
+document.querySelectorAll(".parts button").forEach(b=>b.onclick=()=>{const t=a().currentTime;pause();part=b.dataset.part;document.querySelectorAll(".parts button").forEach(x=>x.classList.toggle("active",x===b));a().currentTime=t;sync(true);build()});
+play.onclick=()=>playing?pause():start();document.querySelector("#stop").onclick=stop;document.querySelector("#back").onclick=()=>{a().currentTime=Math.max(0,a().currentTime-5);sync(true)};seek.oninput=()=>{a().currentTime=Number(seek.value);sync(true)};
+document.querySelectorAll(".fb button").forEach(b=>b.onclick=()=>{result=b.dataset.result;document.querySelectorAll(".fb button").forEach(x=>x.classList.toggle("active",x===b));build()});document.querySelector("#comment").oninput=build;
+function build(){const t=a().currentTime;const txt=[`判定：${result||"未選択"}`,`パート：${labels[part]}`,`再生位置：${fmt(t)} (${t.toFixed(2)}秒)`,`コメント：${document.querySelector("#comment").value||"なし"}`,`端末：${navigator.userAgent}`].join("\n");document.querySelector("#report").textContent=txt;return txt}
+document.querySelector("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(build());alert("コピーしました")}catch(e){alert("下の報告文をコピーしてください")}};
+function loop(){const t=a().currentTime||0;if(!seek.matches(":active"))seek.value=t;time.textContent=`${fmt(t)} / 4:35`;if(playing&&Math.abs(video.currentTime-t*VIDEO_RATIO)>.16)sync(true);requestAnimationFrame(loop)}build();loop();
+</script></body></html>

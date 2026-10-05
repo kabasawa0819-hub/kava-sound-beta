@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KAVA SOUND｜自主練習</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#0e223a;--panel2:#102a47;--text:#f5fbff;--muted:#9eb7cc;--accent:#58e5ff;--good:#72f5ad;--warn:#ffc96f}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 12% 0,#1f4777,transparent 34%),radial-gradient(circle at 88% 0,#54265d,transparent 34%),var(--bg);font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",system-ui,sans-serif;color:var(--text)}
+button,input,textarea{font:inherit}.app{width:min(1040px,100%);margin:auto;padding:10px}
+.back{display:inline-block;color:#a4ddff;text-decoration:none;margin:4px 0 8px}.hero{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:10px}.eyebrow{margin:0;color:#a8d4f7;font-size:.72rem;letter-spacing:.15em}h1{margin:2px 0 0;font-size:clamp(1.45rem,4vw,2.25rem)}.badge{border:1px solid #ffffff25;border-radius:999px;padding:7px 11px;background:#ffffff10;font-size:.78rem}
+.card{background:linear-gradient(155deg,#0e223aef,#09192cef);border:1px solid #ffffff1c;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 14px 40px #0004}
+.title-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}.title-row h2{margin:0;font-size:1.02rem}.small{font-size:.78rem;color:var(--muted);line-height:1.55}
+.part-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.part,.mode{border:1px solid #ffffff22;background:#173451;color:white;border-radius:12px;padding:12px 7px;font-weight:800}.part.active,.mode.active{background:linear-gradient(135deg,#00add3,#6659eb);outline:2px solid #83ebff}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px}
+.transport{display:grid;grid-template-columns:auto auto auto auto 1fr auto;gap:8px;align-items:center}.transport button{border:1px solid #ffffff22;background:#163451;color:white;border-radius:11px;padding:10px 12px}.transport .primary{background:linear-gradient(135deg,#00b8dc,#695cff);font-weight:900}
+input[type=range]{width:100%;accent-color:var(--accent)}.time{min-width:92px;text-align:right;font-variant-numeric:tabular-nums}
+.speed{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:9px}.speed button{border:1px solid #ffffff1e;background:#132d48;color:#dcecff;border-radius:999px;padding:6px 10px}.speed button.active{outline:2px solid #65e5ff}
+.loop{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:9px}.loop button{border:1px solid #ffffff20;background:#153450;color:white;border-radius:11px;padding:10px}.loop button.on{background:#245f42;outline:2px solid #77f1ad}
+.tabs{display:flex;gap:8px;margin-bottom:10px}.tabs button{flex:1;border:1px solid #ffffff22;background:#132c48;color:white;border-radius:11px;padding:10px}.tabs button.active{background:#24526e;outline:2px solid #61dfff}
+.viewer{background:#e9edf1;border-radius:12px;overflow:auto;max-height:66vh;text-align:center;padding:8px}.viewer img{display:block;margin:auto;max-width:100%;height:auto;transition:width .15s}.viewer-controls{display:flex;justify-content:center;gap:8px;align-items:center;margin-top:9px;flex-wrap:wrap}.viewer-controls button{border:1px solid #ffffff20;background:#173451;color:white;border-radius:10px;padding:8px 11px}
+.record-box{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}.record-box button{border:1px solid #ffffff22;background:#173451;color:white;border-radius:12px;padding:11px}.record-box .record{background:#7b2940}.record-box .record.recording{background:#a41e3f;outline:3px solid #ff8da2;animation:pulse 1s infinite alternate}@keyframes pulse{to{filter:brightness(1.35)}}
+.record-result{margin-top:10px;display:none}.record-result.show{display:block}.record-result audio{width:100%;margin-bottom:8px}.record-result a{display:inline-block;color:#9deaff}
+.memo{width:100%;min-height:80px;background:#06172a;color:white;border:1px solid #ffffff22;border-radius:11px;padding:10px;resize:vertical}
+.status{padding:9px 11px;border-radius:11px;background:#071a2c;color:#cde1ef;margin-top:9px;line-height:1.5}
+@media(max-width:680px){.badge{display:none}.part-grid{grid-template-columns:repeat(2,1fr)}.mode-grid{grid-template-columns:1fr}.transport{grid-template-columns:auto auto auto auto 1fr}.time{grid-column:1/-1;text-align:center}.record-box{grid-template-columns:1fr}.viewer{max-height:58vh}}
+</style>
+</head>
+<body>
+<main class="app">
+<a class="back" href="../">← KAVA SOUND メニューへ</a>
+<header class="hero">
+  <div><p class="eyebrow">KAVA SOUND / PRACTICE BETA</p><h1>自主練習</h1></div>
+  <span class="badge">録音・楽譜・歌詞</span>
+</header>
+
+<section class="card">
+<div class="title-row"><h2>① 練習するパート</h2><span class="small" id="partLabel">ソプラノ</span></div>
+<div class="part-grid">
+<button class="part active" data-part="soprano">ソプラノ</button>
+<button class="part" data-part="alto">アルト</button>
+<button class="part" data-part="tenor">男声</button>
+<button class="part" data-part="chorus">合唱</button>
+</div>
+<div class="mode-grid">
+<button class="mode active" data-mode="part">🎧 パート確認<br><span class="small">選んだ音だけ</span></button>
+<button class="mode" data-mode="mix">🎤 重ねて練習<br><span class="small">パート＋合唱</span></button>
+<button class="mode" data-mode="chorus">👥 合唱確認<br><span class="small">全体を聴く</span></button>
+</div>
+</section>
+
+<section class="card">
+<div class="title-row"><h2>② 再生・繰り返し</h2><span class="small">イヤホン推奨</span></div>
+<div class="transport">
+<button id="back5">−5秒</button>
+<button id="play" class="primary">▶ 再生</button>
+<button id="stop">■</button>
+<button id="forward5">＋5秒</button>
+<input id="seek" type="range" min="0" max="275.043" step="0.01" value="0">
+<span class="time" id="time">0:00 / 4:35</span>
+</div>
+<div class="speed"><span class="small">速度</span>
+<button data-speed=".75">0.75</button><button data-speed=".9">0.9</button><button class="active" data-speed="1">1.0</button><button data-speed="1.1">1.1</button>
+</div>
+<div class="loop">
+<button id="setA">A：<strong id="aText">未設定</strong></button>
+<button id="setB">B：<strong id="bText">未設定</strong></button>
+<button id="loopBtn">ループ OFF</button>
+</div>
+</section>
+
+<section class="card">
+<div class="title-row"><h2>③ 楽譜・歌詞</h2><span class="small">画像は拡大できます</span></div>
+<div class="tabs"><button id="scoreTab" class="active">🎼 楽譜</button><button id="lyricsTab">📝 歌詞</button></div>
+<div class="viewer"><img id="sheet" src="../score/page01.jpg" alt="楽譜"></div>
+<div class="viewer-controls" id="scoreControls">
+<button id="prevPage">← 前</button><strong id="pageLabel">1 / 8</strong><button id="nextPage">次 →</button><button id="zoomOut">−</button><button id="zoomIn">＋</button>
+</div>
+</section>
+
+<section class="card">
+<div class="title-row"><h2>④ 自分の歌を録音して聴く</h2><span class="small">録音は端末内だけ。自動送信しません</span></div>
+<div class="record-box">
+<div class="small">「録音＋再生」で、今の位置から伴奏を鳴らしながら録音します。スピーカー音の回り込みを防ぐためイヤホンがおすすめです。</div>
+<button id="recordBtn" class="record">● 録音＋再生</button>
+<button id="recordStop" disabled>■ 録音停止</button>
+</div>
+<div id="recordStatus" class="status">録音待機中</div>
+<div id="recordResult" class="record-result"><audio id="recordPlayback" controls></audio><br><a id="downloadRecording" download="KAVA_SOUND_recording.webm">録音を保存</a></div>
+</section>
+
+<section class="card">
+<div class="title-row"><h2>⑤ 今日の練習メモ</h2><span class="small">この端末に自動保存</span></div>
+<textarea class="memo" id="memo" placeholder="例：30小節からアルトが不安。明日はそこをA-Bループで練習する。"></textarea>
+</section>
+</main>
+
+<script>
+const labels={soprano:"ソプラノ",alto:"アルト",tenor:"男声",chorus:"合唱"};
+const audios={};Object.keys(labels).forEach(k=>audios[k]=new Audio(`../audio/${k}.mp3`));
+let part="soprano",mode="part",speed=1,playing=false,loopOn=false,loopA=null,loopB=null,syncTimer=null;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], a=()=>audios[part];
+const fmt=t=>`${Math.floor((t||0)/60)}:${Math.floor((t||0)%60).toString().padStart(2,"0")}`;
+function activeTracks(){ if(mode==="chorus")return["chorus"]; if(mode==="mix"&&part!=="chorus")return[part,"chorus"]; return[part]; }
+function pauseAll(){Object.values(audios).forEach(x=>x.pause());playing=false;$("#play").textContent="▶ 再生";if(syncTimer){clearInterval(syncTimer);syncTimer=null}}
+function setAllTime(t){Object.values(audios).forEach(x=>{try{x.currentTime=t}catch(e){}})}
+function applyRate(){Object.values(audios).forEach(x=>x.playbackRate=speed)}
+async function playAll(){
+  pauseAll();applyRate();const t=a().currentTime;setAllTime(t);
+  const list=activeTracks();await Promise.allSettled(list.map(k=>audios[k].play()));playing=true;$("#play").textContent="❚❚ 一時停止";
+  syncTimer=setInterval(()=>{if(!playing)return;const ref=a().currentTime;activeTracks().forEach(k=>{if(Math.abs(audios[k].currentTime-ref)>.07)audios[k].currentTime=ref})},700);
+}
+function stopAll(){pauseAll();setAllTime(0)}
+$$(".part").forEach(b=>b.onclick=()=>{const t=a().currentTime;pauseAll();part=b.dataset.part;$$(".part").forEach(x=>x.classList.toggle("active",x===b));$("#partLabel").textContent=labels[part];a().currentTime=t});
+$$(".mode").forEach(b=>b.onclick=()=>{pauseAll();mode=b.dataset.mode;$$(".mode").forEach(x=>x.classList.toggle("active",x===b))});
+$("#play").onclick=()=>playing?pauseAll():playAll();$("#stop").onclick=stopAll;$("#back5").onclick=()=>setAllTime(Math.max(0,a().currentTime-5));$("#forward5").onclick=()=>setAllTime(Math.min(a().duration||275,a().currentTime+5));
+$("#seek").oninput=()=>setAllTime(Number($("#seek").value));
+$$(".speed button").forEach(b=>b.onclick=()=>{speed=Number(b.dataset.speed);applyRate();$$(".speed button").forEach(x=>x.classList.toggle("active",x===b))});
+$("#setA").onclick=()=>{loopA=a().currentTime;$("#aText").textContent=fmt(loopA)};$("#setB").onclick=()=>{loopB=a().currentTime;$("#bText").textContent=fmt(loopB)};
+$("#loopBtn").onclick=()=>{if(loopA==null||loopB==null||loopB<=loopA){alert("AとBを順番に設定してください");return}loopOn=!loopOn;$("#loopBtn").textContent=loopOn?"ループ ON":"ループ OFF";$("#loopBtn").classList.toggle("on",loopOn)};
+
+let page=1,zoom=100,showLyrics=false;
+function showSheet(){if(showLyrics){$("#sheet").src="../score/lyrics.jpg";$("#pageLabel").textContent="歌詞";$("#scoreControls").style.display="none"}else{$("#sheet").src=`../score/page${String(page).padStart(2,"0")}.jpg`;$("#pageLabel").textContent=`${page} / 8`;$("#scoreControls").style.display="flex"}$("#sheet").style.width=zoom+"%"}
+$("#scoreTab").onclick=()=>{showLyrics=false;$("#scoreTab").classList.add("active");$("#lyricsTab").classList.remove("active");showSheet()};$("#lyricsTab").onclick=()=>{showLyrics=true;$("#lyricsTab").classList.add("active");$("#scoreTab").classList.remove("active");showSheet()};
+$("#prevPage").onclick=()=>{page=Math.max(1,page-1);showSheet()};$("#nextPage").onclick=()=>{page=Math.min(8,page+1);showSheet()};$("#zoomIn").onclick=()=>{zoom=Math.min(180,zoom+20);showSheet()};$("#zoomOut").onclick=()=>{zoom=Math.max(80,zoom-20);showSheet()};
+
+let mediaRecorder=null,chunks=[],recordUrl=null;
+function chooseMime(){const types=["audio/webm;codecs=opus","audio/mp4","audio/webm"];return types.find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||""}
+$("#recordBtn").onclick=async()=>{
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$("#recordStatus").textContent="このブラウザでは録音機能を利用できません。";return}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+    chunks=[];const mime=chooseMime();mediaRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+    mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+    mediaRecorder.onstop=()=>{const blob=new Blob(chunks,{type:mediaRecorder.mimeType||"audio/webm"});if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(blob);$("#recordPlayback").src=recordUrl;$("#downloadRecording").href=recordUrl;$("#downloadRecording").download=(blob.type.includes("mp4")?"KAVA_SOUND_recording.m4a":"KAVA_SOUND_recording.webm");$("#recordResult").classList.add("show");stream.getTracks().forEach(t=>t.stop());$("#recordStatus").textContent="録音完了。下で聴き返せます。"};
+    mediaRecorder.start(250);$("#recordBtn").classList.add("recording");$("#recordBtn").textContent="● 録音中";$("#recordBtn").disabled=true;$("#recordStop").disabled=false;$("#recordStatus").textContent="録音中… 自分の声と音源を聴き比べよう";await playAll();
+  }catch(e){$("#recordStatus").textContent="マイクを開始できませんでした。ブラウザのマイク許可を確認してください。"}
+};
+$("#recordStop").onclick=()=>{if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();pauseAll();$("#recordBtn").classList.remove("recording");$("#recordBtn").textContent="● 録音＋再生";$("#recordBtn").disabled=false;$("#recordStop").disabled=true};
+
+const memoKey="kava_sound_practice_memo";$("#memo").value=localStorage.getItem(memoKey)||"";$("#memo").oninput=()=>localStorage.setItem(memoKey,$("#memo").value);
+function uiLoop(){const t=a().currentTime||0;if(!$("#seek").matches(":active"))$("#seek").value=t;$("#time").textContent=`${fmt(t)} / 4:35`;if(loopOn&&loopA!=null&&loopB!=null&&t>=loopB)setAllTime(loopA);requestAnimationFrame(uiLoop)}uiLoop();showSheet();
+</script>
+</body></html>
