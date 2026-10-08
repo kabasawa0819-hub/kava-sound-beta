@@ -1,16 +1,18 @@
-KAVA SOUND 同一URLハブ化アップデート
+KAVA SOUND 小節タイミング登録ツール
 
-このZIPの中身を、現在の kava-sound-beta リポジトリ直下へアップロードしてください。
+アップロード先：
+kava-sound-beta/timing/index.html
 
-追加・更新されるもの
-- index.html              ← 最初のメニュー画面に置き換え
-- karaoke/index.html      ← 現在のカラオケバー検証
-- practice/index.html     ← 新しい自主練習版
-- score/page01〜08.jpg    ← 楽譜
-- score/lyrics.jpg        ← 歌詞表示
+使い方：
+1. ZIPを展開
+2. timing フォルダを GitHub のリポジトリ直下へアップロード
+3. 公開後、このURLで開く
+   https://kabasawa0819-hub.github.io/kava-sound-beta/timing/
 
-現在GitHubにある audio/ と video/ は削除しないでください。
-自主練習版・カラオケ版の両方から共通利用します。
+Space / Enter = 小節頭を記録
+P = 再生/一時停止
+Backspace = 1つ戻す
 
-公開URLは変わりません：
-https://kabasawa0819-hub.github.io/kava-sound-beta/
+CSV / JSON / プレーンテキスト出力対応
+記録はブラウザに自動保存
+トップページにはリンクしない隠しページです。
