@@ -1,20 +1,15 @@
-KAVA SOUND 自主練習版 分離音源アップデート
+KAVA SOUND 合唱録音機能アップデート
 
-このZIPを展開して、GitHubの kava-sound-beta リポジトリ直下へアップロードしてください。
+GitHubの kava-sound-beta / practice / index.html を、
+このZIP内の practice/index.html で上書きしてください。
 
-上書き：
-practice/index.html
+追加機能：
+・「合唱録音（クラス練習）」を追加
+・3秒カウント後に端末マイクだけで録音
+・録音中はKAVA SOUNDの練習音源を鳴らさない
+・同じページ内で複数Takeを録音・聴き返し
+・各Takeを端末に保存可能
+・音楽録音向けにエコーキャンセル等をOFFで要求
+・既存の個人録音、楽譜、歌詞、A-Bループ等は残す
 
-新規追加：
-audio_sep/accompaniment_only.mp3
-audio_sep/soprano_only.mp3
-audio_sep/alto_only.mp3
-audio_sep/tenor_only.mp3
-
-既存の audio/ score/ karaoke/ video/ は削除しないでください。
-
-追加される練習モード：
-・パートだけ
-・伴奏だけ
-・パート＋伴奏
-・合唱確認
+既存の audio / audio_sep / score / karaoke / video フォルダは削除しないでください。
